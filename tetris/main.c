@@ -459,9 +459,6 @@ void printStartScreen()
 
     while (1)
     {
-        // 清空螢幕
-        //printf("\033[2J");
-
         // 判斷使用哪種顏色
         if (color == 1)
         {
