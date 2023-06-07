@@ -429,6 +429,7 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
         }
         else {
             state->score += clearLine(canvas);
+            //printf("\033[%d;%dHLines cleared: %d", CANVAS_HEIGHT + 1, CANVAS_WIDTH * 2 + 5, 0, state->score);
 
             state->x = CANVAS_WIDTH / 2;
             state->y = 0;
@@ -449,8 +450,83 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
     return;
 }
 
+void printStartScreen()
+{
+
+    int color = 1;
+    int row = 3;
+    int col = 0;
+
+    while (1)
+    {
+        // 清空螢幕
+        //printf("\033[2J");
+
+        // 判斷使用哪種顏色
+        if (color == 1)
+        {
+            printf("\033[91m"); // 紅色
+        }
+        else if (color == 2)
+        {
+            printf("\033[93m"); // 黃色
+        }
+        else if (color == 3)
+        {
+            printf("\033[92m"); // 綠色
+        }
+        else if (color == 4)
+        {
+            printf("\033[96m"); // 青色
+        }
+        else if (color == 5)
+        {
+            printf("\033[94m"); // 藍色
+        }
+        else if (color == 6)
+        {
+            printf("\033[95m"); // 紫色
+        }
+
+        // 設定印出位置
+        printf("\033[%d;%dH", row, col);
+
+        // 印出閃爍的文字
+        printf("\033[5m\n");
+        printf("######## ######## ######## ######    ######   #####  \n");
+        printf("   ##    ##          ##    ##    ##    ##   ##     ##\n");
+        printf("   ##    ##          ##    ##    ##    ##    ##      \n");
+        printf("   ##    #######     ##    ######      ##      ###   \n");
+        printf("   ##    ##          ##    ##   ##     ##        ##  \n");
+        printf("   ##    ##          ##    ##    ##    ##   ##     ##\n");
+        printf("   ##    ########    ##    ##     ## ######   #####  \n");
+        printf("\033[25m\033[22m\n");
+        // 切換顏色
+        if (color == 6)
+        {
+            color = 0;
+        }
+        color++;
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\x1b[33m*************** Press \033[4mEnter\033[24m to start ***************\x1b[0m\n");
+
+        // 延遲一段時間，以控制閃爍速度
+        // 請根據你的需求調整延遲時間
+        Sleep(500); // 延遲 500 毫秒 (0.5 秒)
+    }
+}
+
 int main()
 {
+    printStartScreen();
+    getchar();
     srand(time(NULL));
     State state = {
         .x = CANVAS_WIDTH / 2,
@@ -475,7 +551,6 @@ int main()
     }
 
     system("cls");
-    // printf("\e[?25l"); // hide cursor
 
     move(canvas, state.x, state.y, state.rotate, state.x, state.y, state.rotate, state.queue[0]);
 
