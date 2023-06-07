@@ -391,6 +391,32 @@ int clearLine(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH]) {
     return linesCleared;
 }
 
+void printGameOver()
+{
+    system("cls");
+    
+    printf("\n");
+    printf("\033[31m\033[5m");
+    printf("   ######         #       ##       ## ##########        ######    ##       ## ########## #######    \n");
+    printf(" ##     ##       ###      ####   #### ##              ##      ##  ##       ## ##         ##     ##  \n");
+    printf("##              #   #     ## ## ## ## ##             ##        ##  ##     ##  ##         ##     ##  \n");
+    printf("##             ##   ##    ##  ###  ## #########      ##        ##  ##     ##  #########  #######    \n");
+    printf("##    #####   #########   ##   #   ## ##             ##        ##   ##   ##   ##         ##    ##   \n");
+    printf("##       ##  ##       ##  ##       ## ##             ##        ##   ##   ##   ##         ##     ##  \n");
+    printf(" ##     ##  ##         ## ##       ## ##              ##      ##     ## ##    ##         ##      ## \n");
+    printf("   #####    ##         ## ##       ## ##########        ######        ###     ########## ##       ##\n");
+    printf("\033[0m");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\033[93m- Press any key to exit -\033[0m\n");
+}
+
 void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
 {
     if (ROTATE_FUNC()) {
@@ -429,8 +455,7 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
         }
         else {
             state->score += clearLine(canvas);
-            //printf("\033[%d;%dHLines cleared: %d", CANVAS_HEIGHT + 1, CANVAS_WIDTH * 2 + 5, 0, state->score);
-
+            
             state->x = CANVAS_WIDTH / 2;
             state->y = 0;
             state->rotate = 0;
@@ -442,7 +467,7 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
 
             if (!move(canvas, state->x, state->y, state->rotate, state->x, state->y, state->rotate, state->queue[0]))
             {
-                printf("\033[%d;%dH\x1b[41m GAME OVER \x1b[0m\033[%d;%dH", CANVAS_HEIGHT - 3, CANVAS_WIDTH * 2 + 5, CANVAS_HEIGHT + 5, 0);
+                printGameOver();
                 exit(0);
             }
         }
@@ -452,7 +477,6 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
 
 void printStartScreen()
 {
-
     int color = 1;
     int row = 3;
     int col = 0;
@@ -484,7 +508,7 @@ void printStartScreen()
         {
             printf("\033[95m"); // 紫色
         }
-
+        
         // 設定印出位置
         printf("\033[%d;%dH", row, col);
 
@@ -498,12 +522,14 @@ void printStartScreen()
         printf("   ##    ##          ##    ##    ##    ##   ##     ##\n");
         printf("   ##    ########    ##    ##     ## ######   #####  \n");
         printf("\033[25m\033[22m\n");
+        
         // 切換顏色
         if (color == 6)
         {
-            color = 0;
+            break; //跑完開始遊戲
         }
         color++;
+
         printf("\n");
         printf("\n");
         printf("\n");
@@ -512,18 +538,18 @@ void printStartScreen()
         printf("\n");
         printf("\n");
         printf("\n");
-        printf("\x1b[33m*************** Press \033[4mEnter\033[24m to start ***************\x1b[0m\n");
+        printf("\x1b[33m**************** Start in \033[4m3 seconds\033[24m ****************\x1b[0m\n");
 
         // 延遲一段時間，以控制閃爍速度
-        // 請根據你的需求調整延遲時間
         Sleep(500); // 延遲 500 毫秒 (0.5 秒)
     }
 }
 
 int main()
 {
+    printf("\033[?25l"); //隱藏游標
     printStartScreen();
-    getchar();
+    Sleep(2500);
     srand(time(NULL));
     State state = {
         .x = CANVAS_WIDTH / 2,
@@ -557,5 +583,4 @@ int main()
         printCanvas(canvas, &state);
         Sleep(100);
     }
-
 }
